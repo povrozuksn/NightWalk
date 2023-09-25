@@ -1,0 +1,182 @@
+#include "TXLib.h"
+
+void drawSkyDay()
+{
+    //Небо
+    txSetColor (TX_LIGHTBLUE);
+    txSetFillColor (TX_LIGHTBLUE);
+    txRectangle (0, 0, 800, 600);
+}
+
+void drawSkyNight()
+{
+    //Небо
+    txSetColor (RGB ( 0, 0, 0));
+    txSetFillColor (RGB ( 0, 0, 0));
+    txRectangle (0, 0, 800, 600);
+}
+
+void drawLand()
+{
+    //Земля
+    txSetColor (TX_GREEN);
+    txSetFillColor (TX_GREEN);
+    txRectangle (0, 420, 800, 600);
+}
+
+void drawSun(int x, int y)
+{
+    //Солнце
+    txSetColor (TX_YELLOW);
+    txSetFillColor (TX_YELLOW);
+    txCircle (x, y, 50);
+}
+
+void drawHouse()
+{
+    //Дом
+    txSetColor (TX_BROWN, 5);
+    txSetFillColor (TX_BROWN);
+    txRectangle (300,300,550,500);   //Стена
+    txSetColor (TX_YELLOW, 5);
+    txSetFillColor (TX_YELLOW);
+    POINT krysha[3] = {{300, 300}, {425, 200}, {550, 300}};//Крыша
+    txPolygon (krysha, 3);
+    txSetColor (TX_YELLOW, 5);
+    txSetFillColor (TX_YELLOW);
+    txRectangle (330,360,400,420);    //Окно
+    txSetColor (TX_YELLOW, 5);
+    txSetFillColor (TX_YELLOW);
+    txRectangle (440,360,500,480);    //Дверь
+}
+
+void drawBike(int x)
+{
+    //Самокат
+    txSetColor (RGB ( 0, 0, 0), 5);
+    txSetFillColor (TX_GREEN);
+    txCircle (x, 530, 20);
+    txCircle (x+100, 530, 20);
+    txLine(x+20, 530, x+80, 530);
+    txLine(x+70, 470, x+90, 510);
+    txLine(x+50, 470, x+80, 470);
+}
+
+void drawCloud(int x)
+{
+    //Облако
+    txSetColor (TX_BLUE, 3);
+    txSetFillColor (TX_BLUE);
+    txEllipse (x+400-400, 50, x+540-400, 130);
+    txEllipse (x+500-400, 40, x+640-400, 140);
+    txEllipse (x+600-400, 60, x+750-400, 140);
+}
+
+void drawTree(int x)
+{
+    //Дерево
+    txSetColor (TX_BROWN, 3);
+    txSetFillColor (TX_BROWN);
+    txRectangle (x+650-650,360,x+670-650,440);
+    txSetColor (RGB(104, 253, 108), 3);
+    txSetFillColor (RGB(104, 253, 108));
+    txEllipse (x+640-650, 260, x+680-650, 400);
+}
+
+void drawForest()
+{
+    for(int x = 50; x<=450; x=x+50)
+    {
+        drawTree(x);
+    }
+    for(int x = 600; x<=450; x=x+50)
+    drawTree(600);
+    drawTree(650);
+    drawTree(700);
+    drawTree(750);
+
+}
+
+void drawMan(int x, int xRightNoga, int xLeftNoga)
+{
+    txSetColor (RGB(222, 186, 100), 3);
+    txSetFillColor (RGB(222, 186, 100));
+    txCircle (x, 400, 20);       //голова
+    txLine(x, 420, x, 480);    //тело
+    txLine(x, 430, x-20, 460);    //правая рука
+    txLine(x, 430, x+20, 460);    //левая рука
+    txLine(x, 480, x-20+xRightNoga, 510);    //правая нога
+    txLine(x, 480, x+20+xLeftNoga, 510);    //левая нога
+}
+
+int main()
+{
+    txCreateWindow (800, 600);
+
+    int xSun = 150;
+    int ySun = 100;
+    int xCloud = 400;
+    int xBike = 100;
+    int xMan = 600;
+    int xManRightNoga = 0;
+    int xManLeftNoga = 0;
+
+    //Солнце заходит
+    while(xSun<850)
+    {
+        txBegin();
+        drawSkyDay();
+        drawLand();
+        drawSun(xSun, ySun);
+        drawForest();
+        drawHouse();
+        drawBike(xBike);
+        drawCloud(xCloud);
+        drawMan(xMan, xManRightNoga, xManLeftNoga);
+
+        xSun = xSun + 10;
+        ySun = ySun + 4;
+        txEnd();
+        txSleep(10);
+    }
+
+    //Наступает ночь
+    while(xCloud>-400)
+    {
+        txBegin();
+        drawSkyNight();
+        drawLand();
+        drawSun(xSun, ySun);
+        drawForest();
+        drawHouse();
+        drawBike(xBike);
+        drawCloud(xCloud);
+        drawMan(xMan, xManRightNoga, xManLeftNoga);
+
+        xCloud = xCloud - 10;
+        txEnd();
+        txSleep(10);
+    }
+
+    while(xBike<400)
+    {
+        txBegin();
+        drawSkyNight();
+        drawLand();
+        drawSun(xSun, ySun);
+        drawForest();
+        drawHouse();
+        drawBike(xBike);
+        drawCloud(xCloud);
+        drawMan(xMan, random(20), random(-20));
+
+        xBike = xBike + 5;
+        xMan = xMan - 5;
+        txEnd();
+        txSleep(10);
+    }
+
+txTextCursor (false);
+return 0;
+}
+
